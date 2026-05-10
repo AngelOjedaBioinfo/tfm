@@ -1,0 +1,45 @@
+---
+config:
+  layout: fixed
+  theme: base
+  themeVariables:
+    primaryColor: '#E8F4F8'
+    primaryBorderColor: '#2C7DA0'
+    primaryTextColor: '#1B3A4B'
+    lineColor: '#5A7A8A'
+    fontSize: 14px
+---
+flowchart TB
+ subgraph Calibracion["NO — Calibración"]
+    direction LR
+        D["<b>Calibración empírica</b><br>modkit sample-probs<br>10,042 lecturas muestreadas<br>por archivo"]
+        E["<b>Distribución de probabilidades</b><br>5mC: pico ~1.0<br>5hmC: pico ~0.5"]
+        F["<b>Percentil 10</b><br>= 0.793 en ambas muestras"]
+        G["<b>Aplicación simétrica</b><br>--mod-thresholds m:0.79<br>--mod-thresholds h:0.79"]
+  end
+ subgraph Directo["SÍ — Compatible"]
+    direction LR
+        H["<b>Tasas globales obtenidas</b><br>5mC: 0.86–0.89%<br>5hmC: 0.21–0.23%"]
+        I["✓ Compatible con<br>literatura de lepidópteros"]
+  end
+    A["<b>Datos modBAM ONT</b><br>5mC + 5hmC con etiquetas MM/ML"] --> B["<b>Umbral por defecto</b><br>modkit threshold = 0.5"]
+    B --> C{"¿Tasas globales<br>compatibles con<br>literatura?"}
+    C -- NO --> D
+    C -- SÍ --> H
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    H --> I
+
+     D:::process
+     F:::decision
+     G:::process
+     H:::result
+     I:::output
+     A:::input
+    classDef input fill:#D1E8F2,stroke:#2C7DA0,stroke-width:2px,color:#1B3A4B
+    classDef process fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#3E2723
+    classDef decision fill:#FFE082,stroke:#F57F17,stroke-width:2.5px,color:#3E2723
+    classDef result fill:#FFE0B2,stroke:#E65100,stroke-width:2px,color:#3E2723
+    classDef output fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20

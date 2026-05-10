@@ -1,0 +1,33 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryColor: '#E8F4F8'
+    primaryBorderColor: '#2C7DA0'
+    primaryTextColor: '#1B3A4B'
+    lineColor: '#5A7A8A'
+    fontSize: 14px
+---
+flowchart TD
+    A["<b>Diseño experimental</b><br/>n=1 por condición<br/>(10 cerebros pooled por grupo)"]:::input
+    A --> B{"¿Cómo estimar<br/>el parámetro de dispersión<br/>phi en DSS?"}
+
+    B --> C["<b>Opción 1</b><br/>smoothing=FALSE"]
+    C --> C2["❌ Rechazado por DSS<br/><i>'There is no biological replicates.<br/>Please set smoothing=TRUE<br/>or equal.disp=TRUE'</i>"]:::rejected
+
+    B --> D["<b>Opción 2</b><br/>smoothing=TRUE<br/>(kernel local 500 bp default)"]:::process
+    D --> D2["6,197 DMRs 5mC<br/>205 DMRs 5hmC"]:::result
+
+    B --> E["<b>Opción 3</b><br/>equal.disp=TRUE<br/>(varianza compartida)"]:::process
+    E --> E2["62 DMRs 5mC<br/>0 DMRs 5hmC"]:::sensitivity
+
+    D2 --> F["<b>Decisión</b><br/>Adoptar smoothing=TRUE<br/>(recomendación Park &amp; Wu 2016<br/>para diseños sin réplicas)"]:::output
+    E2 --> G["<b>Análisis de sensibilidad</b><br/>reportado en §4.9 Limitaciones<br/>magnitud absoluta DMRs<br/>depende del método"]:::warning
+
+    classDef input fill:#D1E8F2,stroke:#2C7DA0,stroke-width:2px,color:#1B3A4B
+    classDef process fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#3E2723
+    classDef result fill:#FFE0B2,stroke:#E65100,stroke-width:2px,color:#3E2723
+    classDef sensitivity fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px,color:#311B92
+    classDef rejected fill:#FFCDD2,stroke:#C62828,stroke-width:2px,color:#B71C1C
+    classDef warning fill:#FFE082,stroke:#F57F17,stroke-width:2px,color:#3E2723
+    classDef output fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
