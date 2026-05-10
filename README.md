@@ -1,57 +1,43 @@
-# DNA Methylation Pipeline for *Heliconius erato* (v1.0)
+# DNA Methylation Analysis Pipeline for *Heliconius erato* (v1.0)
 
-This repository provides a complete workflow for the identification and characterization of 5mC and 5hmC modifications in *Heliconius erato* using Oxford Nanopore Technologies (ONT) long-read sequencing data.
+Este repositorio contiene el flujo de trabajo bioinformático desarrollado para la identificación y caracterización de modificaciones de ADN (**5mC** y **5hmC**) en cerebros de *Heliconius erato*. El pipeline procesó ~90 millones de sitios CpG únicos, evaluando el efecto del inhibidor **RG108** sobre el paisaje epigenético.
 
-## 1. Technical Specifications
+## 1. Especificaciones Técnicas y Versiones
+Para garantizar la reproducibilidad científica, se detallan las versiones validadas en este estudio:
 
-### Bioinformatics Environment
-* **Basecalling/Mapping:** High-accuracy modBAM files (Minimap2/Dorado).
-* **Modification Calling:** `modkit v0.5.0`
-* **Downstream Analysis:** `R v4.2+`
-* **Key R Libraries:** `DSS` (Dispersion Shrinkage for Sequencing), `bsseq`, `ggplot2`.
+* **Llamada de Modificaciones:** `modkit v0.5.0` (Oxford Nanopore Technologies).
+* **Manejo de Alineamientos:** `samtools v1.16.1` y `minimap2 v2.24`.
+* **Aritmética Genómica:** `bedtools v2.30.0`.
+* **Análisis Estadístico:** `R v4.2.2` con el paquete `DSS v2.46.0` (Bioconductor).
+* **Visualización:** `ggplot2`, `scales` y `RColorBrewer`.
 
-### Processing Parameters
-* **Modification Threshold:** 0.79 (Determined by the 10th percentile of the empirical probability distribution).
-* **Coverage Filter:** Minimum 10x per CpG site across conditions.
-* **Reference Genome:** *H. erato lativitta* v1 (Lepbase).
-* **Statistical Model:** Beta-binomial distribution with shared dispersion estimation (`equal.disp = TRUE`) for non-replicated designs.
+## 2. Lógica de Filtrado y Parámetros Críticos
+* **Umbral Probabilístico (0.79):** Definido a partir del percentil 10 de la distribución empírica de probabilidades de modkit. Este valor asegura un equilibrio entre sensibilidad y especificidad, alineándose con los umbrales de ~0.81 recomendados por ONT para citosinas no modificadas.
+* **Cobertura Mínima:** 10x por sitio CpG en ambas condiciones.
+* **Modelo Estadístico:** Test de Wald basado en una distribución Beta-binomial con estimación de dispersión compartida (`equal.disp = TRUE`), optimizado para pooling de muestras sin réplicas.
 
-## 2. Pipeline Architecture
+## 3. Arquitectura del Proyecto (Scripts)
 
-The pipeline is organized into modular scripts for reproducibility:
+### Procesamiento Core (Bash)
+- `scripts/bash/modkit_pileup.sh`: Ejecución de pileup para detección dual de 5mC y 5hmC.
+- `scripts/bash/filter_coverage.sh`: Filtrado técnico por profundidad y probabilidad.
+- `scripts/bash/prepare_dss_input.sh`: Conversión de datos al formato `(chr, pos, N, X)`.
+- `scripts/bash/run_pipeline_core.sh`: Orquestador principal del flujo de trabajo.
 
-### Bash Modules (`scripts/bash/`)
-1.  `config.sh`: Centralized environment variables and binary paths.
-2.  `modkit_pileup.sh`: Extraction of methylation frequencies and coverage.
-3.  `filter_coverage.sh`: Post-pileup filtering based on depth and probability.
-4.  `prepare_dss_input.sh`: Format conversion for compatibility with the DSS R package.
-5.  `run_pipeline_core.sh`: Orchestration script for the entire processing block.
+### Análisis y Visualización (R)
+- `scripts/R/dss_analysis.R`: Detección estadística de DML y DMR.
+- `scripts/R/genomic_context.R`: Anotación funcional contra GFF3 (Exones, Intrones e Intergénico).
+- `scripts/R/dmr_visualization.R`: Generación de perfiles de metilación para genes candidatos (*dnmt1*, *pak*, *sin3a*).
 
-### R Modules (`scripts/R/`)
-1.  `dss_analysis.R`: Differential methylation testing (DML/DMR detection).
-2.  `genomic_context.R`: Annotation of methylated sites against GFF3 features (Exons, Introns, Intergenic).
-3.  `dmr_visualization.R`: Generation of high-resolution tracks and candidate gene figures.
+## 4. Instrucciones de Uso
+1. **Ambiente:** Recree el entorno con `mamba env create -f bioinfo.yml`.
+2. **Configuración:** Actualice las rutas en `scripts/bash/config.sh`.
+3. **Ejecución:** Ejecute `bash scripts/bash/run_pipeline_core.sh`.
 
-## 3. Data Requirements
+## 5. Instituciones y Créditos
+Investigación para el Máster en Bioinformática de la **Universidad Internacional de Valencia (VIU)** en colaboración con **Universidad Regional Amazónica IKIAM**.
+- **Autor:** Angel Ojeda
+- **Tutor:** Pablo Marín, PhD.
 
-To execute the pipeline, the following directory structure is required:
-* `datos_secuenciacion_ori/`: Input modBAM files (`.bam` and `.bai`).
-* `reference_genome/`: FASTA sequences and GFF3 annotation.
-* `analisis/`: (Auto-generated) Output directory for processed data and figures.
-
-## 4. Execution
-
-1.  Clone the repository and ensure all `.sh` files have execution permissions.
-2.  Update the absolute paths in `scripts/bash/config.sh`.
-3.  Run the core processing:
-    ```bash
-    bash scripts/bash/run_pipeline_core.sh
-    ```
-
-## 5. Acknowledgments
-This research was conducted as part of the Master’s Program in Bioinformatics at **Universidad Internacional de Valencia (VIU)**, in collaboration with **Universidad Regional Amazónica IKIAM**. 
-
-**Project Supervision:** Pablo Marín, PhD.
-
-## 6. License
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+## 6. Licencia
+Este proyecto se distribuye bajo la Licencia MIT.
