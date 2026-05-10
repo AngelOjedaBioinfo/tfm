@@ -1,0 +1,19 @@
+# Datos crudos y pesados
+datos_secuenciacion_ori/
+reference_genome/
+blast_db/
+
+# Resultados y archivos temporales
+analisis/
+*.log
+*.bai
+*.fai
+*.gz
+*.idx
+
+# Scripts de respaldo o temporales
+prepare_test.sh
+test_pipeline/
+
+# Archivos de sistema
+.DS_Store
