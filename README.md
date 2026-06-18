@@ -361,4 +361,4 @@ Universidad Regional Amazónica Ikiam, Tena, Ecuador.
 
 **Supervisors:**
 Pablo Marín, PhD (Universidad Internacional de Valencia, VIU) |
-Caroline Bacquet, PhD (Ikiam / Jiggins Group, Cambridge–Sanger Institute)
+Caroline Bacquet, PhD (Universidad Regional Amazónica Ikiam)
