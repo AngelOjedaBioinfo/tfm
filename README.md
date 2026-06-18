@@ -50,21 +50,21 @@ flowchart LR
     subgraph P1 ["I: Raw Data & Quality"]
         direction TB
         A["<b>modBAM</b><br/>Dorado duplex<br/>+ minimap2"]:::input
-        B["<b>QC & Threshold</b><br/>modkit probs<br/>p10 = 0.793"]
+        B["<b>QC & Threshold</b><br/>modkit probs<br/>empirical p10"]
         A --> B
     end
 
     subgraph P2 ["II: Processing (Bash)"]
         direction TB
-        D["<b>modkit pileup</b><br/>~44.5M CpG"]
-        E["<b>Filters & Intersect</b><br/>≥10× | ~12M Common"]
+        D["<b>modkit pileup</b><br/>~44.5M CpG sites"]
+        E["<b>Filters & Intersect</b><br/>≥10× coverage"]
         D --> E
     end
 
     subgraph P3 ["III: Statistics (R/DSS)"]
         direction TB
         H["<b>DSS v2.58.0</b><br/>Wald Test + DMRs"]
-        I["<b>Final DMRs</b><br/>6,197 5mC | 205 5hmC"]:::result
+        I["<b>DMR tables</b><br/>5mC + 5hmC BED files"]:::result
         H --> I
     end
 
@@ -75,13 +75,16 @@ flowchart LR
         J --> L
     end
 
+    %% Main connections
     P1 --> P2
     P2 --> P3
     P3 --> P4
 
+    %% Styles
     classDef input fill:#D1E8F2,stroke:#2C7DA0,stroke-width:2px,color:#1B3A4B
     classDef result fill:#FFE0B2,stroke:#E65100,stroke-width:2px,color:#3E2723
     classDef output fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
+
 ```
 
 ---
