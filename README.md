@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0008--7799--9525-green)](https://orcid.org/0009-0008-7799-9525)
-[![DOI](https://zenodo.org/badge/1234355389.svg)](https://zenodo.org/badge/latestdoi/1234355389)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20750840.svg)](https://doi.org/10.5281/zenodo.20750840)
 
 Reproducible workflow for simultaneous detection of 5-methylcytosine (5mC) and
 5-hydroxymethylcytosine (5hmC) in insect brain tissue using Oxford Nanopore
